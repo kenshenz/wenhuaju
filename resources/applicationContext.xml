@@ -38,10 +38,22 @@
 		<property name="maxWaitMillis" value="${db.maxwaitmillis}"></property>
 	</bean>
 	
-	<!-- Session配置 -->
-	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- 创建MyBatis的Sql Session Factory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
+		<!-- <property name="configLocation" value="classpath:sqlMapConfig.xml"></property> -->
+		<property name="mapperLocations" value="classpath:com/wenhuaju/mapper/**/*.xml"></property>
+	</bean>
+	
+	<!-- 创建MyBatis的Sql Session -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<!-- 设置MyBatis的Mapper的扫描路径 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.wenhuaju.mapperinterface"></property>
+		<property name=""></property>
 	</bean>
 	
 	<!-- 事务管理配置 -->
@@ -62,7 +74,6 @@
 	
 	<!-- 使用事务注解 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
 	
 	<!-- 启动注解 -->
 	<context:annotation-config/>
