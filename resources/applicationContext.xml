@@ -31,17 +31,17 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="${db.classname}"></property>
 		<property name="url" value="${db.url}"></property>
-		<property name="username" value="${db.username"></property>
-		<property name="password" value="${db.password"></property>
-		<property name="maxIdle" value="${db.maxidle"></property>
-		<property name="maxTotal" value="${db.maxtotal"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password}"></property>
+		<property name="maxIdle" value="${db.maxidle}"></property>
+		<property name="maxTotal" value="${db.maxtotal}"></property>
 		<property name="maxWaitMillis" value="${db.maxwaitmillis}"></property>
 	</bean>
 	
 	<!-- 创建MyBatis的Sql Session Factory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<!-- <property name="configLocation" value="classpath:sqlMapConfig.xml"></property> -->
+		<!-- <property name="configLocation" value="classpath:mybatis-config.xml"></property> -->
 		<property name="mapperLocations" value="classpath:com/wenhuaju/mapper/**/*.xml"></property>
 	</bean>
 	
@@ -50,10 +50,9 @@
 		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
 	</bean>
 	
-	<!-- 设置MyBatis的Mapper的扫描路径 -->
+	<!-- 扫描并创建Mapper实例 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.wenhuaju.mapperinterface"></property>
-		<property name=""></property>
 	</bean>
 	
 	<!-- 事务管理配置 -->

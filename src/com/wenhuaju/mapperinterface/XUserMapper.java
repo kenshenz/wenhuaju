@@ -2,6 +2,8 @@ package com.wenhuaju.mapperinterface;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wenhuaju.po.XUser;
 
 public interface XUserMapper {
@@ -12,6 +14,6 @@ public interface XUserMapper {
 	 * @param password
 	 * @return
 	 */
-	List<XUser> getXUserByUsernameAndPassword(String username, String password);
+	List<XUser> getXUserByUsernameAndPassword(@Param("username")String username, @Param("password")String password);
 	
 }
