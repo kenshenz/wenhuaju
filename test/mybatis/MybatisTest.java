@@ -23,7 +23,7 @@ public class MybatisTest {
 		
 		SqlSession openSession = sqlSessionFactory.openSession();
 		
-		openSession.selectList(statement, parameter);
+		//openSession.selectList(statement, parameter);
 
 	}
 

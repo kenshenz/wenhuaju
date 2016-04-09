@@ -43,6 +43,11 @@
 		<property name="dataSource" ref="dataSource"></property>
 		<!-- <property name="configLocation" value="classpath:mybatis-config.xml"></property> -->
 		<property name="mapperLocations" value="classpath:com/wenhuaju/mapper/**/*.xml"></property>
+		<property name="plugins">
+			<array>
+				<bean class="com.wenhuaju.plugin.PagerInterceptor"></bean>
+			</array>
+		</property>
 	</bean>
 	
 	<!-- 创建MyBatis的Sql Session -->

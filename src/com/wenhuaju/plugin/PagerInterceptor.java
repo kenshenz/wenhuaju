@@ -36,7 +36,7 @@ public class PagerInterceptor implements Interceptor {
 		
 		String countSql = getCountSql(sql);
 		
-		return null;
+		return invocation.proceed();
 	}
 
 	public Object plugin(Object target) {
