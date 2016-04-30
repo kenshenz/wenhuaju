@@ -38,6 +38,7 @@
 		<property name="maxWaitMillis" value="${db.maxwaitmillis}"></property>
 	</bean>
 	
+	<!-- MyBatis 配置开始 -->
 	<!-- 创建MyBatis的Sql Session Factory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -59,6 +60,39 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.wenhuaju.mapperinterface"></property>
 	</bean>
+	<!-- MyBatis 配置结束 -->
+	
+	<!-- JOOQ 配置开始 -->
+	<!-- 可事务管理的数据源代理 -->
+	<bean id="transactionAwareDataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<!-- 创建JOOQ数据库连接提供者 -->
+	<bean id="jooqConnectionProvider" class="org.jooq.impl.DataSourceConnectionProvider">
+		<constructor-arg ref="transactionAwareDataSource" />
+	</bean>
+	
+	<!-- 创建JOOQ DSL配置 -->
+	<bean id="jooqConfig" class="org.jooq.impl.DefaultConfiguration">
+		<property name="SQLDialect">
+			<value type="org.jooq.SQLDialect">MYSQL</value>
+		</property>
+		<property name="connectionProvider" ref="jooqConnectionProvider" />
+		<!-- <property name="executeListenerProvider">
+			<array>
+				<bean class="org.jooq.impl.DefaultExecuteListenerProvider">
+					<constructor-arg index="0" ref="exceptionTranslator" />
+				</bean>
+			</array>
+		</property> -->
+	</bean>
+	
+	<!-- 创建DSL Context，用于build and exec sql -->
+	<bean id="jooqDSLContext" class="org.jooq.impl.DefaultDSLContext">
+		<constructor-arg ref="jooqConfig" />
+	</bean>
+	<!-- JOOQ 配置结束 -->
 	
 	<!-- 事务管理配置 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -76,7 +110,7 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
 	</aop:config> -->
 	
-	<!-- 使用事务注解 -->
+	<!-- 使用事务注解@Transactional -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
 	<!-- 启动注解 -->
