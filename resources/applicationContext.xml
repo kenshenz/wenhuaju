@@ -79,4 +79,41 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
+	<!-- activiti 配置 -->
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="databaseSchemaUpdate" ref="true"></property>
+		<property name="jobExecutorActivate" ref="false"></property>
+		<property name="asyncExecutorEnabled" ref="true"></property>
+		<property name="asyncExecutorActivate" ref="false"></property>
+		
+		<property name="deploymentResources"
+			value="classpath*:/org/activiti/spring/test/autodeployment/autodeploy.*.bpmn20.xml" />
+		<!-- default: Group all resources into a single deployment and apply duplicate filtering to that deployment -->
+		<!-- single-resource: Create a separate deployment for each individual resource and apply duplicate filtering to that deployment -->
+		<!-- resource-parent-folder: Create a separate deployment for resources that share the same parent folder and apply duplicate filtering to that deployment -->
+		<property name="deploymentMode" value="single-resource"></property>
+	</bean>
+	
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration"></property>
+	</bean>
+	
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"></bean>
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"></bean>
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"></bean>
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"></bean>
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"></bean>
+	
+	
+	<!-- shiro 配置 -->
+	<bean id="realm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+		<property name="realm" ref="realm"></property>
+	</bean>
+	
+	
 </beans>
